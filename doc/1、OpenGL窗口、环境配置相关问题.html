@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1、OpenGL窗口、环境配置相关问题</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><p></p><div class="toc"><h3>目录</h3><ul><ul><li><a href="#1QtOpenGL_1">1、使用Qt库跨平台配置OpenGL环境</a></li><li><a href="#2GLFWWindowsOpenGL_10">2、使用GLFW库在Windows上配置OpenGL环境</a></li><li><a href="#3GLFWMacCMakeOpenGL_16">3、使用GLFW库在Mac上用CMake配置OpenGL环境</a></li><li><a href="#4WindowhOpenGL_106">4、使用Window.h原生窗口配置OpenGL环境</a></li><li><a href="#5CMakeQt_175">5、使用CMake编译Qt项目</a></li></ul></ul></div><p></p>
+<h2><a id="1QtOpenGL_1"></a>1、使用Qt库跨平台配置OpenGL环境</h2>
+<p>在Qt中搭建OpenGL环境非常方便，只需要继承QOpenGLWidget就可以了，然后重载三个虚函数即可。<br>
+virtual void initializeGL() ；<br>
+virtual void	paintGL() ；<br>
+virtual void	resizeGL(int w, int h)；<br>
+<img src="https://img-blog.csdnimg.cn/202101292115369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2><a id="2GLFWWindowsOpenGL_10"></a>2、使用GLFW库在Windows上配置OpenGL环境</h2>
+<p>首先，去GLFW的官网下载预编译的库 https://www.glfw.org/download.html。当然也可以下载源码自己用CMake编译。<br>
+下载之后的文件夹如下：<br>
+<img src="https://img-blog.csdnimg.cn/2021020113205147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>
+只需要将上述的include里面的头文件，以及对应库文件夹中的库文件配置到VS中的项目属性窗口即可。</p>
+<h2><a id="3GLFWMacCMakeOpenGL_16"></a>3、使用GLFW库在Mac上用CMake配置OpenGL环境</h2>
+<p>首先，去GLFW的官网下载源码或者预编译的库 https://www.glfw.org/download.html。<br>
+下面使用预编译库，利用CLion使用CMake进行配置：</p>
+<pre><code class="prism language-cpp"><span class="token comment">// 设置版本及项目名</span>
+<span class="token function">cmake_minimum_required</span><span class="token punctuation">(</span>VERSION <span class="token number">3.16</span><span class="token punctuation">)</span>
+<span class="token function">project</span><span class="token punctuation">(</span>Learn_OpenGL<span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span>target Learn_OpenGL<span class="token punctuation">)</span>
+
+<span class="token comment">// CMake引入预编译的静态库libglfw3.a</span>
+<span class="token function">ADD_LIBRARY</span><span class="token punctuation">(</span>glfw3 STATIC IMPORTED<span class="token punctuation">)</span>
+<span class="token function">SET_TARGET_PROPERTIES</span><span class="token punctuation">(</span>glfw3 PROPERTIES IMPORTED_LOCATION $<span class="token punctuation">{</span>CMAKE_CURRENT_SOURCE_DIR<span class="token punctuation">}</span><span class="token operator">/</span>glfw<span class="token operator">/</span>lib<span class="token operator">/</span>libglfw3<span class="token punctuation">.</span>a<span class="token punctuation">)</span>
+
+<span class="token comment">// 定义变量</span>
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_CXX_STANDARD <span class="token number">11</span><span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span>GLFW_SOURCE_DIR $<span class="token punctuation">{</span>CMAKE_CURRENT_SOURCE_DIR<span class="token punctuation">}</span><span class="token operator">/</span>glfw<span class="token punctuation">)</span>
+<span class="token comment">// set(GLAD_GL "${GLFW_SOURCE_DIR}/deps/glad/gl.h" "${GLFW_SOURCE_DIR}/deps/glad_gl.c") //如果要使用glad需要加上</span>
+
+<span class="token comment">// 头文件路径</span>
+<span class="token function">include_directories</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>CMAKE_CURRENT_SOURCE_DIR<span class="token punctuation">}</span><span class="token operator">/</span>src<span class="token punctuation">)</span>
+<span class="token function">include_directories</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>GLFW_SOURCE_DIR<span class="token punctuation">}</span><span class="token operator">/</span>include<span class="token punctuation">)</span>
+<span class="token comment">// include_directories(${GLFW_SOURCE_DIR}/deps) //如果要使用glad需要加上</span>
+
+<span class="token comment">// 源文件路径</span>
+<span class="token function">aux_source_directory</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>CMAKE_CURRENT_SOURCE_DIR<span class="token punctuation">}</span><span class="token operator">/</span>src TOOL_SRC<span class="token punctuation">)</span>
+
+<span class="token comment">// 生成可执行程序</span>
+<span class="token function">add_executable</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>target<span class="token punctuation">}</span>
+        <span class="token comment">//${GLAD_GL}</span>
+        $<span class="token punctuation">{</span>TOOL_SRC<span class="token punctuation">}</span>
+        main<span class="token punctuation">.</span>cpp
+        <span class="token punctuation">)</span>
+        
+<span class="token comment">// 链接依赖库</span>
+<span class="token comment">// 根据GLFW的官网可知，在Mac上GLFW创建OpenGL窗口上下文依赖于OpenGL、Cocoa、IOKit三个库，需要引入进来，否则编译报错</span>
+<span class="token function">find_library</span><span class="token punctuation">(</span>OpenGL_LIBRARY OpenGL <span class="token punctuation">)</span>
+<span class="token function">find_library</span><span class="token punctuation">(</span>Cocoa_LIBRARY Cocoa <span class="token punctuation">)</span>
+<span class="token function">find_library</span><span class="token punctuation">(</span>IOKit_LIBRARY IOKit <span class="token punctuation">)</span>
+<span class="token function">target_link_libraries</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>target<span class="token punctuation">}</span>  $<span class="token punctuation">{</span>OpenGL_LIBRARY<span class="token punctuation">}</span> $<span class="token punctuation">{</span>Cocoa_LIBRARY<span class="token punctuation">}</span> $<span class="token punctuation">{</span>IOKit_LIBRARY<span class="token punctuation">}</span> glfw3<span class="token punctuation">)</span>
+
+<span class="token comment">// 设置exe输出目录</span>
+<span class="token function">set</span><span class="token punctuation">(</span>custom_output_dir $<span class="token punctuation">{</span>CMAKE_CURRENT_BINARY_DIR<span class="token punctuation">}</span><span class="token operator">/</span>bin<span class="token operator">/</span><span class="token punctuation">)</span>
+<span class="token function">set_target_properties</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>target<span class="token punctuation">}</span> PROPERTIES RUNTIME_OUTPUT_DIRECTORY $<span class="token punctuation">{</span>custom_output_dir<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token function">set_target_properties</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>target<span class="token punctuation">}</span> PROPERTIES LINK_FLAGS_RELEASE <span class="token operator">-</span>s<span class="token punctuation">)</span>
+</code></pre>
+<p>然后就可以创建main.cpp开始写程序了</p>
+<pre><code class="prism language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;GLFW/glfw3.h&gt;</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    GLFWwindow<span class="token operator">*</span> window<span class="token punctuation">;</span>
+
+    <span class="token comment">/* Initialize the library */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">glfwInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/* Create a windowed mode window and its OpenGL context */</span>
+    window <span class="token operator">=</span> <span class="token function">glfwCreateWindow</span><span class="token punctuation">(</span><span class="token number">640</span><span class="token punctuation">,</span> <span class="token number">480</span><span class="token punctuation">,</span> <span class="token string">"Hello World"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>window<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/* Make the window's context current */</span>
+    <span class="token function">glfwMakeContextCurrent</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/* Loop until the user closes the window */</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">glfwWindowShouldClose</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">/* Render here */</span>
+        <span class="token function">glClear</span><span class="token punctuation">(</span>GL_COLOR_BUFFER_BIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">/* Swap front and back buffers */</span>
+        <span class="token function">glfwSwapBuffers</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">/* Poll for and process events */</span>
+        <span class="token function">glfwPollEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">glfwTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2><a id="4WindowhOpenGL_106"></a>4、使用Window.h原生窗口配置OpenGL环境</h2>
+<pre><code class="prism language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;windows.h&gt;</span></span>
+<span class="token comment">// 监听用户操作</span>
+LRESULT CALLBACK <span class="token function">GLWindowProc</span><span class="token punctuation">(</span>HWND hwnd<span class="token punctuation">,</span> UINT msg<span class="token punctuation">,</span> WPARAM wParam<span class="token punctuation">,</span> LPARAM lParam<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	<span class="token keyword">switch</span> <span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+	<span class="token punctuation">{</span>
+		<span class="token keyword">case</span> WM_CLOSE<span class="token operator">:</span>
+			<span class="token function">PostQuitMessage</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token function">DefWindowProc</span><span class="token punctuation">(</span>hwnd<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> wParam<span class="token punctuation">,</span> lParam<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+INT WINAPI <span class="token function">WinMain</span><span class="token punctuation">(</span>HINSTANCE hInstance<span class="token punctuation">,</span> HINSTANCE hPrevInstance<span class="token punctuation">,</span> LPSTR lpCmdLine<span class="token punctuation">,</span> <span class="token keyword">int</span> nShowCmd<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">// 注册窗口</span>
+	WNDCLASSEX wndclass<span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>cbClsExtra <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>cbSize <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>WNDCLASSEX<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>cbWndExtra <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>hbrBackground <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>hCursor <span class="token operator">=</span> <span class="token function">LoadCursor</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> IDC_ARROW<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>hIcon <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>hIconSm <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>hInstance <span class="token operator">=</span> hInstance<span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>lpfnWndProc <span class="token operator">=</span> GLWindowProc<span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>lpszClassName <span class="token operator">=</span> L<span class="token string">"GLWindow"</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>lpszMenuName <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+	wndclass<span class="token punctuation">.</span>style <span class="token operator">=</span> CS_VREDRAW <span class="token operator">|</span> CS_HREDRAW<span class="token punctuation">;</span>
+	ATOM atom <span class="token operator">=</span> <span class="token function">RegisterClassEx</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>wndclass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>atom<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token function">MessageBox</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> L<span class="token string">"Register Fail"</span><span class="token punctuation">,</span> L<span class="token string">"Error"</span><span class="token punctuation">,</span> MB_OK<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// 创建确定大小的视口</span>
+	RECT rect<span class="token punctuation">;</span>
+	rect<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	rect<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token number">800</span><span class="token punctuation">;</span>
+	rect<span class="token punctuation">.</span>top <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	rect<span class="token punctuation">.</span>bottom <span class="token operator">=</span> <span class="token number">600</span><span class="token punctuation">;</span>
+	<span class="token function">AdjustWindowRect</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>rect<span class="token punctuation">,</span> WS_OVERLAPPEDWINDOW<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">// 创建并显示窗口</span>
+	<span class="token keyword">int</span> windowWidth <span class="token operator">=</span> rect<span class="token punctuation">.</span>right <span class="token operator">-</span> rect<span class="token punctuation">.</span>left<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> windowHeight <span class="token operator">=</span> rect<span class="token punctuation">.</span>bottom <span class="token operator">-</span> rect<span class="token punctuation">.</span>top<span class="token punctuation">;</span>
+	HWND hwnd <span class="token operator">=</span> <span class="token function">CreateWindowEx</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">,</span> L<span class="token string">"GLWindow"</span><span class="token punctuation">,</span> L<span class="token string">"OpenGL Window"</span><span class="token punctuation">,</span> WS_OVERLAPPEDWINDOW<span class="token punctuation">,</span>
+		<span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> windowWidth<span class="token punctuation">,</span> windowHeight<span class="token punctuation">,</span>
+		<span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> hInstance<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">ShowWindow</span><span class="token punctuation">(</span>hwnd<span class="token punctuation">,</span> SW_SHOW<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">UpdateWindow</span><span class="token punctuation">(</span>hwnd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">// 让程序持续运行</span>
+	MSG msg<span class="token punctuation">;</span>
+	<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+	<span class="token punctuation">{</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">PeekMessage</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>msg<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> PM_REMOVE<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token punctuation">{</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>msg<span class="token punctuation">.</span>message <span class="token operator">==</span> WM_QUIT<span class="token punctuation">)</span>
+			<span class="token punctuation">{</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token function">TranslateMessage</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token function">DispatchMessage</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2><a id="5CMakeQt_175"></a>5、使用CMake编译Qt项目</h2>
+<p>这里介绍在Mac下的方法：<br>
+1.首先下载Qt库，由于QT官网下载较慢，建议使用镜像网站下载：https://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.13/5.13.0/<br>
+2.下载其中的mac版本dmg文件进行安装，建议所有模块都选上（尤其是里面的WebEngine模块一定要选上）<br>
+<code>注意：</code>如果编译报错找不到 WebEngine，请尝试运行 Qt 安装目录中的maintenance tool ，添加 QtWebEngine module，还不行就只能重新安装Qt）</p>
+<pre><code class="prism language-cpp"><span class="token comment">// 设置版本及项目名</span>
+<span class="token function">cmake_minimum_required</span><span class="token punctuation">(</span>VERSION <span class="token number">3.16</span><span class="token punctuation">)</span>
+<span class="token function">project</span><span class="token punctuation">(</span>LearnOpenCV<span class="token punctuation">)</span>
+
+<span class="token comment">// 设置变量</span>
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_CXX_STANDARD <span class="token number">11</span><span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_AUTOMOC ON<span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_AUTOUIC ON<span class="token punctuation">)</span>
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_AUTORCC ON<span class="token punctuation">)</span>
+<span class="token comment">/*
+ *这里可以创建符号链接，将Qt库链接到自己的项目目录中，方便查看
+ *在project的目录下将Qt 5.13.0 添加符号链接到 父目录 Qt 文件夹。
+ 	例如：ln -s /Users/xxx/xxx/Qt5.13.0 ../Qt, cmake 中指向的位置为 ../Qt/5.13.0/clang_64/lib/cmake
+	注意：/Users/xxx/Qt5.13.0 为个人电脑上面的Qt的安装文件夹，例如 ln -s /Users/xxx/xxx/Qt5.13.0 /Users/xxx/project/Qt
+*/</span>
+<span class="token function">set</span><span class="token punctuation">(</span>QT_LOCAL_PATH <span class="token punctuation">.</span><span class="token operator">/</span>Qt<span class="token operator">/</span><span class="token number">5.13</span><span class="token number">.0</span><span class="token punctuation">)</span> #需要填入自己安装的路径，这里设置为软链接Qt目录
+<span class="token function">set</span><span class="token punctuation">(</span>CMAKE_PREFIX_PATH $<span class="token punctuation">{</span>QT_LOCAL_PATH<span class="token punctuation">}</span><span class="token operator">/</span>clang_64<span class="token operator">/</span>lib<span class="token operator">/</span>cmake<span class="token punctuation">)</span> #mac下用clang编译器
+
+<span class="token comment">// 添加Qt模块</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Widgets REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Core REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Gui REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5OpenGL REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Qml REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Quick REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5QuickControls2 REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Multimedia REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5WebEngine REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5Concurrent REQUIRED<span class="token punctuation">)</span>
+<span class="token function">find_package</span><span class="token punctuation">(</span>Qt5 COMPONENTS Svg REQUIRED<span class="token punctuation">)</span>
+
+<span class="token comment">// 头文件目录</span>
+<span class="token function">include_directories</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>QT_LOCAL_PATH<span class="token punctuation">}</span><span class="token operator">/</span>clang_64<span class="token operator">/</span>include<span class="token punctuation">)</span> <span class="token comment">//Qt头文件</span>
+<span class="token comment">/*
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12" CACHE STRING "Minimum OS X deployment version" FORCE)
+get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
+get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+find_program(DEPLOYQT_EXECUTABLE NAMES windeployqt macdeployqt HINTS "${_qt_bin_dir}")
+*/</span>
+<span class="token function">add_definitions</span><span class="token punctuation">(</span>$<span class="token punctuation">{</span>Qt5Widgets_DEFINITIONS<span class="token punctuation">}</span> $<span class="token punctuation">{</span>QtQml_DEFINITIwONS<span class="token punctuation">}</span> $<span class="token punctuation">{</span>$<span class="token punctuation">{</span>Qt5Quick_DEFINITIONS<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token comment">// qt5_add_resources(QT_RESOURCES assets/main.qrc)</span>
+
+<span class="token comment">// 源文件</span>
+<span class="token function">file</span><span class="token punctuation">(</span>GLOB SOURCE_FILES <span class="token operator">*</span><span class="token punctuation">.</span>cpp <span class="token operator">*</span><span class="token punctuation">.</span>h <span class="token operator">*</span><span class="token punctuation">.</span>hpp <span class="token operator">*</span><span class="token punctuation">.</span>c src<span class="token comment">/*.*)
+
+// 生成exe
+add_executable(LearnOpenCV ${SOURCE_FILES})
+
+// 链接库
+target_link_libraries(LearnOpenCV Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui Qt5::Qml  Qt5::Quick Qt5::QuickControls2 Qt5::Multimedia Qt5::WebEngine Qt5::Svg Qt5::Concurrent)
+qt5_use_modules(LearnOpenCV Core Widgets Gui OpenGL Qml Quick QuickControls2)
+</span></code></pre>
+</div>
+</body>
+
+</html>
