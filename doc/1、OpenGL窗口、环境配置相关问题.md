@@ -4,7 +4,38 @@
 virtual void initializeGL() ；
 virtual void	paintGL() ；
 virtual void	resizeGL(int w, int h)；
-![在这里插入图片描述](https://img-blog.csdnimg.cn/202101292115369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70)
+
+class MyGLWidget : public QOpenGLWidget
+{
+public:
+    MyGLWidget(QWidget *parent) : QOpenGLWidget(parent) { }
+
+protected:
+    void initializeGL() override
+    {
+        // Set up the rendering context, load shaders and other resources, etc.:
+        QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+        f->glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        ...
+    }
+
+    void resizeGL(int w, int h) override
+    {
+        // Update projection matrix and other size related settings:
+        m_projection.setToIdentity();
+        m_projection.perspective(45.0f, w / float(h), 0.01f, 100.0f);
+        ...
+    }
+
+    void paintGL() override
+    {
+        // Draw the scene:
+        QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+        f->glClear(GL_COLOR_BUFFER_BIT);
+        ...
+    }
+
+};
 
 
 
@@ -12,6 +43,7 @@ virtual void	resizeGL(int w, int h)；
 首先，去GLFW的官网下载预编译的库 https://www.glfw.org/download.html。当然也可以下载源码自己用CMake编译。
 下载之后的文件夹如下：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021020113205147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70)
+
 只需要将上述的include里面的头文件，以及对应库文件夹中的库文件配置到VS中的项目属性窗口即可。
 
 ## 3、使用GLFW库在Mac上用CMake配置OpenGL环境
