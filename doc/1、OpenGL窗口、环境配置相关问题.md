@@ -42,13 +42,13 @@ protected:
 
 
 ## 2、使用GLFW库在Windows上配置OpenGL环境
-首先，去GLFW的官网下载预编译的库 https://www.glfw.org/download.html。当然也可以下载源码自己用CMake编译。<br/>
+首先，去GLFW的官网下载预编译的库 <https://www.glfw.org/download.html>。当然也可以下载源码自己用CMake编译。<br/>
 下载之后的文件夹如下：<br/>
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021020113205147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70)<br/>
 只需要将上述的include里面的头文件，以及对应库文件夹中的库文件配置到VS中的项目属性窗口即可。
 
 ## 3、使用GLFW库在Mac上用CMake配置OpenGL环境
-首先，去GLFW的官网下载源码或者预编译的库 https://www.glfw.org/download.html。<br/>
+首先，去GLFW的官网下载源码或者预编译的库 <https://www.glfw.org/download.html>。<br/>
 下面使用预编译库，利用CLion使用CMake进行配置：<br/>
 	
 
