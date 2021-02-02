@@ -1,2 +1,2 @@
 # LearnOpenGL
-My learning  openGL repository
+OpenGL API学习
