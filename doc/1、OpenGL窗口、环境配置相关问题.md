@@ -207,10 +207,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 ```
 
 ## 5、使用CMake编译Qt项目
-这里介绍在Mac下的方法：
-1.首先下载Qt库，由于QT官网下载较慢，建议使用镜像网站下载：<https://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.13/5.13.0/>
-2.下载其中的mac版本dmg文件进行安装，建议所有模块都选上（尤其是里面的WebEngine模块一定要选上）
-`注意：`如果编译报错找不到 WebEngine，请尝试运行 Qt 安装目录中的maintenance tool ，添加 QtWebEngine module，还不行就只能重新安装Qt）
+这里介绍在Mac下的方法：<br/>
+1.首先下载Qt库，由于QT官网下载较慢，建议使用镜像网站下载：<https://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.13/5.13.0/><br/>
+2.下载其中的mac版本dmg文件进行安装，建议所有模块都选上（尤其是里面的WebEngine模块一定要选上）<br/>
+`注意：`如果编译报错找不到 WebEngine，请尝试运行 Qt 安装目录中的maintenance tool ，添加 QtWebEngine module，还不行就只能重新安装Qt）<br/>
 ```cmake
 // 设置版本及项目名
 cmake_minimum_required(VERSION 3.16)
