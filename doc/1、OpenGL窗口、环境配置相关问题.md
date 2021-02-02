@@ -1,9 +1,9 @@
 ﻿@[TOC](目录)
-## 1、使用Qt库跨平台配置OpenGL环境
-在Qt中搭建OpenGL环境非常方便，只需要继承QOpenGLWidget就可以了，然后重载三个虚函数即可。
-virtual void initializeGL() ；
-virtual void	paintGL() ；
-virtual void	resizeGL(int w, int h)；
+## 1、使用Qt库跨平台配置OpenGL环境<br/>
+在Qt中搭建OpenGL环境非常方便，只需要继承QOpenGLWidget就可以了，然后重载三个虚函数即可。<br/>
+virtual void initializeGL() ；<br/>
+virtual void	paintGL() ；<br/>
+virtual void	resizeGL(int w, int h)；<br/>
 
 ```cpp
 class MyGLWidget : public QOpenGLWidget
@@ -42,14 +42,14 @@ protected:
 
 
 ## 2、使用GLFW库在Windows上配置OpenGL环境
-首先，去GLFW的官网下载预编译的库 https://www.glfw.org/download.html。当然也可以下载源码自己用CMake编译。
-下载之后的文件夹如下：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2021020113205147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70)
+首先，去GLFW的官网下载预编译的库 https://www.glfw.org/download.html。当然也可以下载源码自己用CMake编译。<br/>
+下载之后的文件夹如下：<br/>
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2021020113205147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjY4NDMxMw==,size_16,color_FFFFFF,t_70)<br/>
 只需要将上述的include里面的头文件，以及对应库文件夹中的库文件配置到VS中的项目属性窗口即可。
 
 ## 3、使用GLFW库在Mac上用CMake配置OpenGL环境
-首先，去GLFW的官网下载源码或者预编译的库 https://www.glfw.org/download.html。
-下面使用预编译库，利用CLion使用CMake进行配置：
+首先，去GLFW的官网下载源码或者预编译的库 https://www.glfw.org/download.html。<br/>
+下面使用预编译库，利用CLion使用CMake进行配置：<br/>
 	
 
 ```cpp
