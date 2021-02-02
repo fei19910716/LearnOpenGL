@@ -1,3 +1,3 @@
 # LearnOpenGL
 
-My OpenGL learining mark
+My OpenGL learning mark
