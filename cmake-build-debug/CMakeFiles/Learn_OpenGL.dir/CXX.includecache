@@ -56,7 +56,11 @@ GLFW/glfw3.h
 GLUT/glut.h
 -
 
+../src/Fixed_rendering_pipeline/MatrixOperation.h
+
 /Users/fordchen/CLionProjects/LearnOpenGL/main.cpp
 Fixed_rendering_pipeline/BasicShapes.h
 /Users/fordchen/CLionProjects/LearnOpenGL/Fixed_rendering_pipeline/BasicShapes.h
+Fixed_rendering_pipeline/MatrixOperation.h
+/Users/fordchen/CLionProjects/LearnOpenGL/Fixed_rendering_pipeline/MatrixOperation.h
 

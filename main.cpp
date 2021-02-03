@@ -1,5 +1,6 @@
 
 #include "Fixed_rendering_pipeline/BasicShapes.h"
+#include "Fixed_rendering_pipeline//MatrixOperation.h"
 
 int main() {
     GLFWwindow* window;
@@ -25,7 +26,7 @@ int main() {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        FixedRenderingPipeline::DrawTriangle();
+        FixedRenderingPipeline::MatrixOperation();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
