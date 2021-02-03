@@ -34,7 +34,7 @@ namespace FixedRenderingPipeline{
 
     }
 
-    // 画线
+    // 画三角形
     int DrawLine(){
         glClearColor(0.0,0.0,0.0,0.3);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -59,6 +59,40 @@ namespace FixedRenderingPipeline{
         glVertex3f(0.0,0.0,-0.5f);
 
         glVertex3f(0.5,0.0,-0.7f);
+        glEnd();
+    }
+
+    int DrawTriangle(){
+        glClearColor(0.0,0.0,0.0,0.3);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glMatrixMode(GL_PROJECTION_MATRIX);
+        gluPerspective(50.0, 800.0/600.0,0.1,1000.0);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glLineWidth(4.0f);// 设置线宽
+
+        // front face: CCW 默认正面是逆时针画点的三角形
+        glEnable(GL_CULL_FACE);// 剔除背面，如果三角形的三个点是顺时针画的，就会被剔除
+        // glFrontFace(GL_CW); // 将顺时针设置为正面
+
+        /*
+         * GL_TRIANGLES：每3个点画三角形
+         * GL_TRIANGLES_FAN: 每两个点与第一个点连成三角形
+         * GL_TRIANGLES_STRIP: 相邻3点画三角形，如果是奇数点：n，n+1，n+2连成三角形；如果是偶数点：n，n-1，n+1连成三角形
+         */
+        glBegin(GL_TRIANGLES);
+        glColor4ub(255,0,0,255); // 设置当前点颜色
+        glVertex3f(0.5,0.5,-0.7f);
+
+        glColor4ub(0,255,0,255); // 设置当前点颜色
+        glVertex3f(0.0,0.0,-0.5f);
+
+        glColor4ub(0,0,255,255); // 设置当前点颜色
+        glVertex3f(0.5,0.0,-0.7f);
+
         glEnd();
     }
 }

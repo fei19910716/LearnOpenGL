@@ -12,6 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47540c6b-3f52-40e3-ad2d-d667f223ed34" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Learn_OpenGL.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Learn_OpenGL.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/bin/Learn_OpenGL" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/bin/Learn_OpenGL" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Fixed_rendering_pipeline/BasicShapes.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fixed_rendering_pipeline/BasicShapes.h" afterDir="false" />
     </list>
@@ -38,6 +41,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
     <configuration name="Learn_OpenGL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Learn_OpenGL" TARGET_NAME="Learn_OpenGL" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Learn_OpenGL" RUN_TARGET_NAME="Learn_OpenGL">
@@ -60,7 +69,7 @@
       <workItem from="1612253317590" duration="15000" />
       <workItem from="1612253379822" duration="34000" />
       <workItem from="1612253417683" duration="3000" />
-      <workItem from="1612332911199" duration="970000" />
+      <workItem from="1612332911199" duration="2111000" />
     </task>
     <servers />
   </component>
@@ -68,21 +77,25 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2518" height="384" key="GridCell.Tab.0.bottom" timestamp="1612333726540">
+    <state width="2518" height="384" key="GridCell.Tab.0.bottom" timestamp="1612334680227">
       <screen x="0" y="23" width="2560" height="1344" />
     </state>
-    <state width="2518" height="384" key="GridCell.Tab.0.bottom/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726540" />
-    <state width="2518" height="384" key="GridCell.Tab.0.center" timestamp="1612333726539">
+    <state width="2518" height="384" key="GridCell.Tab.0.bottom/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612334680227" />
+    <state width="2518" height="384" key="GridCell.Tab.0.center" timestamp="1612334680226">
       <screen x="0" y="23" width="2560" height="1344" />
     </state>
-    <state width="2518" height="384" key="GridCell.Tab.0.center/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
-    <state width="2518" height="384" key="GridCell.Tab.0.left" timestamp="1612333726539">
+    <state width="2518" height="384" key="GridCell.Tab.0.center/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612334680226" />
+    <state width="2518" height="384" key="GridCell.Tab.0.left" timestamp="1612334680226">
       <screen x="0" y="23" width="2560" height="1344" />
     </state>
-    <state width="2518" height="384" key="GridCell.Tab.0.left/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
-    <state width="2518" height="384" key="GridCell.Tab.0.right" timestamp="1612333726539">
+    <state width="2518" height="384" key="GridCell.Tab.0.left/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612334680226" />
+    <state width="2518" height="384" key="GridCell.Tab.0.right" timestamp="1612334680226">
       <screen x="0" y="23" width="2560" height="1344" />
     </state>
-    <state width="2518" height="384" key="GridCell.Tab.0.right/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
+    <state width="2518" height="384" key="GridCell.Tab.0.right/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612334680226" />
+    <state x="945" y="330" width="670" height="676" key="search.everywhere.popup" timestamp="1612334651666">
+      <screen x="0" y="23" width="2560" height="1344" />
+    </state>
+    <state x="945" y="330" width="670" height="676" key="search.everywhere.popup/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612334651666" />
   </component>
 </project>
