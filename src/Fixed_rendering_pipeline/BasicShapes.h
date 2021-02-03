@@ -26,6 +26,7 @@ namespace FixedRenderingPipeline{
 
         glColor4ub(255,255,255,255); // 设置点的颜色
         glPointSize(20.0f);
+        glEnable(GL_POINT_SMOOTH);// 将point变成圆形
 
         glBegin(GL_POINTS);
         glVertex3f(0.0,0.0,-0.5f);// opengl 使用的是右手坐标系，camera朝向-z，右边为+x，向上为+y
@@ -77,6 +78,8 @@ namespace FixedRenderingPipeline{
         // front face: CCW 默认正面是逆时针画点的三角形
         glEnable(GL_CULL_FACE);// 剔除背面，如果三角形的三个点是顺时针画的，就会被剔除
         // glFrontFace(GL_CW); // 将顺时针设置为正面
+
+        glPolygonMode(GL_FRONT,GL_LINE); // 线框模式：默认为：GL_FILL
 
         /*
          * GL_TRIANGLES：每3个点画三角形
