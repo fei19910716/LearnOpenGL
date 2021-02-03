@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="Learn_OpenGL" targetName="Learn_OpenGL" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="47540c6b-3f52-40e3-ad2d-d667f223ed34" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fixed_rendering_pipeline/BasicShapes.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fixed_rendering_pipeline/BasicShapes.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1nuwEFHVaPc8C5NxhyOIZGTtyBZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Learn_OpenGL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Learn_OpenGL" TARGET_NAME="Learn_OpenGL" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Learn_OpenGL" RUN_TARGET_NAME="Learn_OpenGL">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="47540c6b-3f52-40e3-ad2d-d667f223ed34" name="Default Changelist" comment="" />
+      <created>1612253169698</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612253169698</updated>
+      <workItem from="1612253170946" duration="131000" />
+      <workItem from="1612253317590" duration="15000" />
+      <workItem from="1612253379822" duration="34000" />
+      <workItem from="1612253417683" duration="3000" />
+      <workItem from="1612332911199" duration="970000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="2518" height="384" key="GridCell.Tab.0.bottom" timestamp="1612333726540">
+      <screen x="0" y="23" width="2560" height="1344" />
+    </state>
+    <state width="2518" height="384" key="GridCell.Tab.0.bottom/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726540" />
+    <state width="2518" height="384" key="GridCell.Tab.0.center" timestamp="1612333726539">
+      <screen x="0" y="23" width="2560" height="1344" />
+    </state>
+    <state width="2518" height="384" key="GridCell.Tab.0.center/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
+    <state width="2518" height="384" key="GridCell.Tab.0.left" timestamp="1612333726539">
+      <screen x="0" y="23" width="2560" height="1344" />
+    </state>
+    <state width="2518" height="384" key="GridCell.Tab.0.left/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
+    <state width="2518" height="384" key="GridCell.Tab.0.right" timestamp="1612333726539">
+      <screen x="0" y="23" width="2560" height="1344" />
+    </state>
+    <state width="2518" height="384" key="GridCell.Tab.0.right/2560.-99.2560.1417/0.23.2560.1344@0.23.2560.1344" timestamp="1612333726539" />
+  </component>
+</project>
