@@ -1,0 +1,3 @@
+﻿  ObjModel.cpp
+D:\VSProjects\OpenGL\LearnOpenGL-createWindow\LearnOpenGL-createWindow\ObjModel.cpp(123,23): warning C4018: “<”: 有符号/无符号不匹配
+  LearnOpenGL-createWindow.vcxproj -> D:\VSProjects\OpenGL\LearnOpenGL-createWindow\Debug\LearnOpenGL-createWindow.exe
