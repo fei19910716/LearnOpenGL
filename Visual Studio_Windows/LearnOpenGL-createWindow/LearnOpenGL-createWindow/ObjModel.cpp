@@ -159,10 +159,10 @@ void ObjModel::draw()
 	glMaterialf(GL_FRONT, GL_SHININESS, 60.0f); // 设置高光的系数
 
 	// set texture
-	Texture texture;
-	texture.init("resource\\earth.bmp");
+	auto texture = Texture::textureCreate("resource\\earth.bmp",true);
+
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture.textureID_);
+	glBindTexture(GL_TEXTURE_2D, texture->textureID_);
 
 	
 	glBegin(GL_TRIANGLES);
