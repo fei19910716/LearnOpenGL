@@ -46,7 +46,7 @@ void Texture::initWithSOIL(const std::string imagePath, bool flip_y)
 	}
 }
 
-std::shared_ptr<Texture> Texture::textureCreate(const std::string imagePath, bool flip_y)
+std::shared_ptr<Texture> Texture::createTexture(const std::string imagePath, bool flip_y)
 {
 	if (texture_map_.find(imagePath) != texture_map_.end()) {
 		return texture_map_[imagePath];

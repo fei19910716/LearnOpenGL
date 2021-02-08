@@ -14,18 +14,30 @@ public:
 	*/
 	void init(const std::string imagePath);
 
-	
+	/*
+	* 使用三方库SOIL加载图片生成opengl纹理
+	*/
 	void initWithSOIL(const std::string imagePath, bool flip_y = false);
 
 	/*
 	* opengl纹理的id
 	*/
 	GLuint  textureID_;
-
+	/*
+	* 纹理的路径，将作为缓存texture_map_的key
+	*/
 	std::string path_;
-
+	/*
+	* 存储所有加载过的texture，避免重复加载
+	*/
 	static std::unordered_map<std::string, std::shared_ptr<Texture>> texture_map_;
-	static std::shared_ptr<Texture> textureCreate(const std::string imagePath, bool flip_y = false);
+	/*
+	* 根据传入的图片路径调用SOIL生成opengl纹理并缓存起来
+	*/
+	static std::shared_ptr<Texture> createTexture(const std::string imagePath, bool flip_y = false);
+	/*
+	* 删除缓存中的texture，并删除GPU中的纹理显存
+	*/
 	static void removeTexture(std::shared_ptr<Texture> texture);
 };
 
