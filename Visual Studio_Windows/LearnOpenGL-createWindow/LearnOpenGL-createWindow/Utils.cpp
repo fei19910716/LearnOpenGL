@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "Texture.h"
 
 #include <Windows.h>
 #include <gl/GL.h>
@@ -54,6 +55,24 @@ unsigned char* Utils::decodeBMP(unsigned char* bpmData, int& width, int& height)
 
 void Utils::drawSimpleVertex()
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.1, 0.4, 0.6, 1.0);
+
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+
+    // set the mv matrix
+    //***********************************注意：透视矩阵不能在这里设置************************************
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+    glRotatef(45, 1.0, 0.0, 0.0);
+
+    // set texture
+    Texture texture;
+    texture.init("resource\\test.bmp");
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture.textureID_);
+
     glBegin(GL_TRIANGLES);
     // 用自己的顶点数据
     /*glColor4ub(255, 0, 0, 255);*/ glVertex3f(-0.5f, -0.25f, -1.0f); glNormal3f(0.0, 1.0, 0.0);  glTexCoord2f(0.0, 0.0); // 左下

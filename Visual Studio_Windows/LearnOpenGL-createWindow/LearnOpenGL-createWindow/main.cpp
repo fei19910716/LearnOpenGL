@@ -8,21 +8,99 @@
 #include "Texture.h"
 #include "ObjModel.h"
 #include "Utils.h"
+#include "Camera.h"
 
 
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
+#pragma comment(lib,"Winmm.lib")
 
 
 HDC dc;
 WNDCLASSEX wndclass;
 HWND hwnd;
+/*
+* 场景摄像机
+*/
+Camera camera;
+/*
+* 鼠标点击运动时的初始鼠标位置
+*/
+POINT orignalMousePosition;
+/*
+* bool值，控制鼠标运动
+*/
+bool bRotateByMouse = false;
 
 // 监听用户操作
 LRESULT CALLBACK GLWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_KEYDOWN: // 按“下”键
+		switch (wParam)
+		{
+			case 'A':
+				camera.moveLeft_ = true;
+				break;
+			case 'D':
+				camera.moveRight_ = true;
+				break;
+			case 'W':
+				camera.moveForward_ = true;
+				break;
+			case 'S':
+				camera.moveBack_ = true;
+				break;
+			default:
+				break;
+		}
+		return 0;;
+	case WM_KEYUP:
+		switch (wParam)
+		{
+			case 'A':
+				camera.moveLeft_ = false;
+				break;
+			case 'D':
+				camera.moveRight_ = false;
+				break;
+			case 'W':
+				camera.moveForward_ = false;
+				break;
+			case 'S':
+				camera.moveBack_ = false;
+				break;
+			default:
+				break;
+		}
+		return 0;
+	case WM_RBUTTONDOWN: // 鼠标右键按下
+		bRotateByMouse = true;
+		orignalMousePosition.x = LOWORD(lParam);
+		orignalMousePosition.y = HIWORD(lParam);
+		ClientToScreen(hwnd, &orignalMousePosition); // 坐标转换，统一为屏幕坐标
+		SetCapture(hwnd);
+		ShowCursor(false);
+		return 0;
+	case WM_RBUTTONUP:
+		bRotateByMouse = false;
+		ReleaseCapture();
+		SetCursorPos(orignalMousePosition.x, orignalMousePosition.y); // 鼠标需要重新显示在初始位置
+		ShowCursor(true);
+		return 0;
+	case WM_MOUSEMOVE:
+		if (bRotateByMouse) {
+			POINT currentPos;
+			currentPos.x = LOWORD(lParam);
+			currentPos.y = HIWORD(lParam);
+			ClientToScreen(hwnd, &currentPos);
+			float deltaX = currentPos.x - orignalMousePosition.x;
+			float deltaY = currentPos.y - orignalMousePosition.y;
+			camera.pitch(deltaY / 1000.0f);
+			camera.yaw(deltaX / 1000.0f);
+		}
+		return 0;
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
@@ -99,6 +177,8 @@ void createWindow(HINSTANCE hInstance) {
 	//***********************************注意：透视矩阵需要在这里设置************************************
 	glMatrixMode(GL_PROJECTION);
 	gluPerspective(50.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	ShowWindow(hwnd, SW_SHOW);
 	UpdateWindow(hwnd);
@@ -106,50 +186,10 @@ void createWindow(HINSTANCE hInstance) {
 
 // opengl 渲染场景
 void drawScene() {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(0.1, 0.4, 0.6, 1.0);
-
-	glEnable(GL_CULL_FACE);
-
-	// set the mv matrix
-	//***********************************注意：透视矩阵不能在这里设置************************************
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-
-	// set the light
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	float blackColor[] = { 0.0,0.0,0.0 };
-	float whiteColor[] = { 1.0,1.0,1.0 };
-	float lightPosition[] = { 0.0, 0.0, 1.0, 0.0};
-	glLightfv(GL_LIGHT0, GL_AMBIENT, whiteColor);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteColor);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, whiteColor);
-	//*********************************** 灯光向量与normal向量同向时，diffuse 和specular ***********************************
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);// direction, point ,spot light
-
-	float blackMaterial[] = { 0.0,0.0,0.0 };
-	float ambientMaterial[] = { 0.1,0.1,0.1 };
-	float diffuseMaterial[] = { 0.4	,0.4,0.4 };
-	float specularMaterial[] = { 0.9,0.0,0.0 };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientMaterial);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, specularMaterial);
-
-	// set texture
-	Texture texture;
-	texture.init("resource\\test.bmp");
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture.textureID_);
+	
 
 	ObjModel objModel;
-	objModel.init("resource\\Sphere.obj");
-
-	// set the verticex
-	glPointSize(10.0f);
-	//glPolygonMode(GL_FRONT, GL_LINE);
-	//Utils::drawSimpleVertex();
+	objModel.load("resource\\Sphere.obj");
 	
 	objModel.draw();
 }
@@ -160,7 +200,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	regiterWindow(hInstance);
 	createWindow(hInstance);
 
-
+	static float timeSinceStart = timeGetTime() / 1000.0f;
 	// 让程序持续运行
 	MSG msg;
 	while (true)
@@ -175,6 +215,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+		float currentTime = timeGetTime() / 1000.0f;
+		float deltaTime = currentTime - timeSinceStart;
+		timeSinceStart = currentTime;
+		camera.update(deltaTime);
 
 		//draw scene
 		drawScene();
