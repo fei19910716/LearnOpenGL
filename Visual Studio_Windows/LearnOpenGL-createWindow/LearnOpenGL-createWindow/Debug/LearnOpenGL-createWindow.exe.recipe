@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\VSProjects\OpenGL\LearnOpenGL-createWindow\Debug\LearnOpenGL-createWindow.exe</FullPath>
+      <FullPath>D:\gitProjects\LearnOpenGL\Visual Studio_Windows\LearnOpenGL-createWindow\Debug\LearnOpenGL-createWindow.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

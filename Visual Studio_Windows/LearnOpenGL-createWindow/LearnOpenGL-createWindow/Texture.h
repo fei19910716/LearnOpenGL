@@ -6,6 +6,11 @@
 #include <unordered_map>
 #include <memory>
 
+/*
+* 不使用glew的话，GL_CLAMP_TO_EDGE宏未定义，可以自己定义
+*/
+#define GL_CLAMP_TO_EDGE 0x812F
+
 class Texture
 {
 public:
@@ -17,7 +22,7 @@ public:
 	/*
 	* 使用三方库SOIL加载图片生成opengl纹理
 	*/
-	void initWithSOIL(const std::string imagePath, bool flip_y = false);
+	void initWithSOIL(const std::string imagePath, bool flip_y = false, unsigned int wrapMode = GL_CLAMP_TO_EDGE);
 
 	/*
 	* opengl纹理的id

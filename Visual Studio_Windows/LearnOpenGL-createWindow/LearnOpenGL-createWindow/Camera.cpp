@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include <iostream>
 
 Camera::Camera():position_(0.0f,0.0f,0.0f),
 				 up_(0.0f,1.0f,0.0f),
@@ -15,8 +16,8 @@ Camera::Camera():position_(0.0f,0.0f,0.0f),
 
 void Camera::update(float deltaTime)
 {
-	float speed = 0.1f;
-	float rotateSpeed = 0.01f;
+	float speed = 1.0f;
+	float rotateSpeed = 1.0f;
 	if (moveLeft_) {
 		// span(deltaTime* speed);
 		yaw(rotateSpeed * deltaTime);
@@ -24,13 +25,20 @@ void Camera::update(float deltaTime)
 	if (moveRight_) {
 		// span(-deltaTime* speed);
 		yaw(-rotateSpeed * deltaTime);
+
 	}
 	if (moveForward_) {
 		zoom(deltaTime * speed);
+		
 	}
 	if (moveBack_) {
 		zoom(-deltaTime * speed);
+		
 	}
+	/*
+	* 这里非常重要，不要就会出现鼠标抬起画面在动的现象
+	*/
+	glLoadIdentity();
 
 	// se mvp
 	gluLookAt(position_.x, position_.y, position_.z,
@@ -53,6 +61,7 @@ void Camera::zoom(float scale)
 	forwardDirection.normalize();
 	position_ = position_ + forwardDirection * scale;
 	target_ = target_ + forwardDirection * scale;
+	
 }
 
 

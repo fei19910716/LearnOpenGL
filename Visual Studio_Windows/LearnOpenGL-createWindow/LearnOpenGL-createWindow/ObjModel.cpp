@@ -46,7 +46,7 @@ void ObjModel::load(const char* objModel)
 					ssOneLine >> floatData.v[0];
 					ssOneLine >> floatData.v[1];
 					texcoordDatas.push_back(floatData);
-					printf("texcoord : %f,%f\n", floatData.v[0], floatData.v[1]);
+					// printf("texcoord : %f,%f\n", floatData.v[0], floatData.v[1]);
 				}
 				else if (szOneLine[1] == 'n') {
 					ssOneLine >> temp;
@@ -55,7 +55,7 @@ void ObjModel::load(const char* objModel)
 					ssOneLine >> floatData.v[1];
 					ssOneLine >> floatData.v[2];
 					normaDatals.push_back(floatData);
-					printf("normal : %f,%f,%f\n", floatData.v[0], floatData.v[1], floatData.v[2]);
+					// printf("normal : %f,%f,%f\n", floatData.v[0], floatData.v[1], floatData.v[2]);
 				}
 				else {
 					ssOneLine >> temp;
@@ -64,7 +64,7 @@ void ObjModel::load(const char* objModel)
 					ssOneLine >> floatData.v[1];
 					ssOneLine >> floatData.v[2];
 					positionDatas.push_back(floatData);
-					printf("position : %f,%f,%f\n", floatData.v[0], floatData.v[1], floatData.v[2]);
+					// printf("position : %f,%f,%f\n", floatData.v[0], floatData.v[1], floatData.v[2]);
 				}
 			}
 			else if (szOneLine[0] == 'f') {
@@ -120,8 +120,6 @@ void ObjModel::load(const char* objModel)
 
 void ObjModel::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.1, 0.4, 0.6, 1.0);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);

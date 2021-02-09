@@ -9,6 +9,7 @@
 #include "ObjModel.h"
 #include "Utils.h"
 #include "Camera.h"
+#include "SkyBox.h"
 
 
 #pragma comment(lib,"opengl32.lib")
@@ -31,6 +32,8 @@ POINT orignalMousePosition;
 * bool值，控制鼠标运动
 */
 bool bRotateByMouse = false;
+
+static float timeSinceStart = 0.0f;
 
 // 监听用户操作
 LRESULT CALLBACK GLWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -184,23 +187,39 @@ void createWindow(HINSTANCE hInstance) {
 	UpdateWindow(hwnd);
 }
 
-// opengl 渲染场景
+/*
+* 绘制场景
+*/
 void drawScene() {
-	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1f, 0.3f, 0.8f, 1.0f);
+
+	float currentTime = timeGetTime() / 1000.0f;
+	float deltaTime = currentTime - timeSinceStart;
+	timeSinceStart = currentTime;
+	camera.update(deltaTime);
+
+	//draw scene
+	SkyBox skybox;
+	skybox.load("resource\\skybox\\");
+	skybox.draw(camera.position_.x, camera.position_.y, camera.position_.z);
+
 
 	ObjModel objModel;
 	objModel.load("resource\\Sphere.obj");
-	
 	objModel.draw();
 }
 
-
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+	// 对窗口程序启动控制台输出，方便调试
+	AllocConsole();freopen("CONOUT$", "r+", stdout);
+
 	regiterWindow(hInstance);
 	createWindow(hInstance);
 
-	static float timeSinceStart = timeGetTime() / 1000.0f;
+	timeSinceStart = timeGetTime() / 1000.0f;
+
 	// 让程序持续运行
 	MSG msg;
 	while (true)
@@ -215,11 +234,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		float currentTime = timeGetTime() / 1000.0f;
-		float deltaTime = currentTime - timeSinceStart;
-		timeSinceStart = currentTime;
-		camera.update(deltaTime);
-
+		
 		//draw scene
 		drawScene();
 

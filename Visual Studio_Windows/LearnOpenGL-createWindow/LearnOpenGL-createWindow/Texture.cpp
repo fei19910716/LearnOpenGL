@@ -24,8 +24,8 @@ void Texture::init(const std::string imagePath)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	//纹理数据从cpu传到gpu
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
@@ -35,7 +35,7 @@ void Texture::init(const std::string imagePath)
 	delete content;
 }
 
-void Texture::initWithSOIL(const std::string imagePath, bool flip_y)
+void Texture::initWithSOIL(const std::string imagePath, bool flip_y, unsigned int wrapMode)
 {
 	path_ = imagePath;
 	if (flip_y) {
@@ -43,6 +43,13 @@ void Texture::initWithSOIL(const std::string imagePath, bool flip_y)
 	}
 	else {
 		textureID_ = SOIL_load_OGL_texture(imagePath.c_str(), 0, 0, SOIL_FLAG_POWER_OF_TWO);
+	}
+	// SOIL_load_OGL_texture无法指定wrapMode,所以通过传入形参来判断
+	if (wrapMode == GL_CLAMP_TO_EDGE) {
+		glBindTexture(GL_TEXTURE_2D, textureID_);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
