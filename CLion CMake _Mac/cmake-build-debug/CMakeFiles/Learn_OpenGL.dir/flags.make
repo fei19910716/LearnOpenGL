@@ -6,5 +6,5 @@ CXX_FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/Ma
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/fordchen/CLionProjects/LearnOpenGL/src -I/Users/fordchen/CLionProjects/LearnOpenGL/glfw/include 
+CXX_INCLUDES = -I"/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/src" -I"/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/glfw/include" 
 

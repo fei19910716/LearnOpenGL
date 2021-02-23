@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-../glfw/include/GLFW/glfw3.h
+../glfw/include/glfw/glfw3.h
 stddef.h
 -
 stdint.h
@@ -50,17 +50,7 @@ GL/glext.h
 GL/glu.h
 -
 
-../src/Fixed_rendering_pipeline/BasicShapes.h
-GLFW/glfw3.h
--
-GLUT/glut.h
--
-
-../src/Fixed_rendering_pipeline/MatrixOperation.h
-
-/Users/fordchen/CLionProjects/LearnOpenGL/main.cpp
-Fixed_rendering_pipeline/BasicShapes.h
-/Users/fordchen/CLionProjects/LearnOpenGL/Fixed_rendering_pipeline/BasicShapes.h
-Fixed_rendering_pipeline/MatrixOperation.h
-/Users/fordchen/CLionProjects/LearnOpenGL/Fixed_rendering_pipeline/MatrixOperation.h
+/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/main.cpp
+glfw/glfw3.h
+/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/glfw/glfw3.h
 

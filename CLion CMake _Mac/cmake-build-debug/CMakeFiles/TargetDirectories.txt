@@ -1,3 +1,3 @@
-/Users/fordchen/CLionProjects/LearnOpenGL/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/fordchen/CLionProjects/LearnOpenGL/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/fordchen/CLionProjects/LearnOpenGL/cmake-build-debug/CMakeFiles/Learn_OpenGL.dir
+/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/cmake-build-debug/CMakeFiles/Learn_OpenGL.dir
