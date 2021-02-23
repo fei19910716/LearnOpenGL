@@ -123,6 +123,33 @@ Learn_OpenGL/fast:
 	$(MAKE) -f CMakeFiles/Learn_OpenGL.dir/build.make CMakeFiles/Learn_OpenGL.dir/build
 .PHONY : Learn_OpenGL/fast
 
+glfw/deps/glad.o: glfw/deps/glad.c.o
+
+.PHONY : glfw/deps/glad.o
+
+# target to build an object file
+glfw/deps/glad.c.o:
+	$(MAKE) -f CMakeFiles/Learn_OpenGL.dir/build.make CMakeFiles/Learn_OpenGL.dir/glfw/deps/glad.c.o
+.PHONY : glfw/deps/glad.c.o
+
+glfw/deps/glad.i: glfw/deps/glad.c.i
+
+.PHONY : glfw/deps/glad.i
+
+# target to preprocess a source file
+glfw/deps/glad.c.i:
+	$(MAKE) -f CMakeFiles/Learn_OpenGL.dir/build.make CMakeFiles/Learn_OpenGL.dir/glfw/deps/glad.c.i
+.PHONY : glfw/deps/glad.c.i
+
+glfw/deps/glad.s: glfw/deps/glad.c.s
+
+.PHONY : glfw/deps/glad.s
+
+# target to generate assembly for a file
+glfw/deps/glad.c.s:
+	$(MAKE) -f CMakeFiles/Learn_OpenGL.dir/build.make CMakeFiles/Learn_OpenGL.dir/glfw/deps/glad.c.s
+.PHONY : glfw/deps/glad.c.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Learn_OpenGL"
+	@echo "... glfw/deps/glad.o"
+	@echo "... glfw/deps/glad.i"
+	@echo "... glfw/deps/glad.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

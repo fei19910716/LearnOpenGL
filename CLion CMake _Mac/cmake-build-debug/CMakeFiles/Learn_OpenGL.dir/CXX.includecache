@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
-../glfw/include/glfw/glfw3.h
+../glfw/deps/glad/glad.h
+glad/khrplatform.h
+-
+
+../glfw/deps/glad/khrplatform.h
+stdint.h
+-
+inttypes.h
+-
+stdint.h
+-
+
+../glfw/include/GLFW/glfw3.h
 stddef.h
 -
 stdint.h
@@ -51,6 +63,10 @@ GL/glu.h
 -
 
 /Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/main.cpp
-glfw/glfw3.h
-/Users/fordchen/CLionProjects/LearnOpenGL/CLion CMake _Mac/glfw/glfw3.h
+glad/glad.h
+-
+GLFW/glfw3.h
+-
+iostream
+-
 
