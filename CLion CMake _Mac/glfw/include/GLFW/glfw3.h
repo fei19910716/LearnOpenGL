@@ -2572,7 +2572,7 @@ GLFWAPI void glfwWindowHintString(int hint, const char* value);
  *  @remark @win32 Window creation will fail if the Microsoft GDI software
  *  OpenGL implementation is the only one available.
  *
- *  @remark @win32 If the executable has an icon resource named `GLFW_ICON,` it
+ *  @remark @win32 If the executable has an icon resources named `GLFW_ICON,` it
  *  will be set as the initial icon for the window.  If no such icon is present,
  *  the `IDI_APPLICATION` icon will be used instead.  To set a different icon,
  *  see @ref glfwSetWindowIcon.

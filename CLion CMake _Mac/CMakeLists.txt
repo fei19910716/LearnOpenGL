@@ -10,6 +10,7 @@ set(GLFW_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/glfw)
 set(GLAD_GL "${GLFW_SOURCE_DIR}/deps/glad/glad.h" "${GLFW_SOURCE_DIR}/deps/glad.c")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty)
 include_directories(${GLFW_SOURCE_DIR}/include)
 include_directories(${GLFW_SOURCE_DIR}/deps)
 
