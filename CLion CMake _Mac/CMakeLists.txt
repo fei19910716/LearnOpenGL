@@ -13,6 +13,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty)
 include_directories(${GLFW_SOURCE_DIR}/include)
 include_directories(${GLFW_SOURCE_DIR}/deps)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/assimp/include)
+
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/assimp/code)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -21,11 +24,12 @@ add_executable(${target}
         ${GLAD_GL}
         ${TOOL_SRC}
         main.cpp)
-
+add_subdirectory(3rdParty)
 find_library(OpenGL_LIBRARY OpenGL )
 find_library(Cocoa_LIBRARY Cocoa )
 find_library(IOKit_LIBRARY IOKit )
-target_link_libraries(${target}  ${OpenGL_LIBRARY} ${Cocoa_LIBRARY} ${IOKit_LIBRARY} glfw3)
+
+target_link_libraries(${target}  ${OpenGL_LIBRARY} ${Cocoa_LIBRARY} ${IOKit_LIBRARY} assimp glfw3)
 
 set(custom_output_dir ${CMAKE_CURRENT_BINARY_DIR}/bin/)
 set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${custom_output_dir})
