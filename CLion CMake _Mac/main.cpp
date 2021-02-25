@@ -23,7 +23,7 @@ const unsigned int SCR_HEIGHT = 600;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = (float)SCR_WIDTH  / 2.0;
+float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
 
@@ -72,11 +72,15 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS); // GL_ALWAYS: always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))  GL_LESS: normal effect
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);// 启用模板测试
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // 只要一个片段的模板值不等于(GL_NOTEQUAL)参考值1，片段将会通过测试并被绘制，否则会被丢弃。
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // build and compile shaders
     // -------------------------
-    Shader shader("../../resources/shaders/advancedGL/1.1.depth_testing.vs", "../../resources/shaders/advancedGL/1.1.depth_testing.fs");
+    Shader shader("../../resources/shaders/advancedGL/2.stencil_testing.vs", "../../resources/shaders/advancedGL/2.stencil_testing.fs");
+    Shader shaderSingleColor("../../resources/shaders/advancedGL/2.stencil_testing.vs", "../../resources/shaders/advancedGL/2.stencil_single_color.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -161,7 +165,7 @@ int main()
 
     // load textures
     // -------------
-    unsigned int cubeTexture  = loadTexture("../../resources/textures/marble.jpg");
+    unsigned int cubeTexture = loadTexture("../../resources/textures/marble.jpg");
     unsigned int floorTexture = loadTexture("../../resources/textures/metal.png");
 
     // shader configuration
@@ -171,7 +175,7 @@ int main()
 
     // render loop
     // -----------
-    while(!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window))
     {
         // per-frame time logic
         // --------------------
@@ -186,14 +190,33 @@ int main()
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // don't forget to clear the stencil buffer!
 
-        shader.use();
+        // set uniforms
+        shaderSingleColor.use();
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        shaderSingleColor.setMat4("view", view);
+        shaderSingleColor.setMat4("projection", projection);
+
+        shader.use();
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
+
+        // draw floor as normal, but don't write the floor to the stencil buffer, we only care about the containers. We set its mask to 0x00 to not write to the stencil buffer.
+        glStencilMask(0x00); // 渲染地板时关闭模板缓冲写入
+        // floor
+        glBindVertexArray(planeVAO);
+        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+
+        // 1st. render pass, draw objects as normal, writing to the stencil buffer
+        // --------------------------------------------------------------------
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);// 启用模板缓冲写入
+        glStencilMask(0xFF);
         // cubes
         glBindVertexArray(cubeVAO);
         glActiveTexture(GL_TEXTURE0);
@@ -205,12 +228,33 @@ int main()
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        // floor
-        glBindVertexArray(planeVAO);
-        glBindTexture(GL_TEXTURE_2D, floorTexture);
-        shader.setMat4("model", glm::mat4(1.0f));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        // 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
+        // Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing
+        // the objects' size differences, making it look like borders.
+        // -----------------------------------------------------------------------------------------------------------------------------
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);// 根据模板缓冲进行对比
+        glStencilMask(0x00);// 不允许写入模板缓冲
+        glDisable(GL_DEPTH_TEST);// 关闭深度测试，避免被floor 遮挡
+        shaderSingleColor.use();
+        float scale = 1.1;// 这里疑问？？ 其实应该是将每个顶点按法线方向移动才行，不能简单的scale
+        // cubes
+        glBindVertexArray(cubeVAO);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+        shaderSingleColor.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+        shaderSingleColor.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 0, 0xFF);
+        glEnable(GL_DEPTH_TEST);// 开启深度测试
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -284,7 +328,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
-unsigned int loadTexture(char const *path)
+unsigned int loadTexture(char const * path)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
