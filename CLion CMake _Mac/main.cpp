@@ -267,6 +267,15 @@ int main()
         glfwPollEvents();
     }
 
+    /*
+     * glBufferSubData(GL_ARRAY_BUFFER, 24, sizeof(data), &data); // 范围： [24, 24 + sizeof(data)] 区别于glBufferData，表示对缓冲区填充部分数据
+     * glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY); 获取缓冲区指针，然后可以调用memset等函数填充数据
+     * glCopyBufferSubData(GLenum readtarget, GLenum writetarget, GLintptr readoffset GLintptr writeoffset, GLsizeiptr size); 用一个缓冲区数据填充另一个缓冲区； 如果两个缓冲区类型相同，可以通过 glBindBuffer(GL_COPY_READ_BUFFER, vbo1); glBindBuffer(GL_COPY_WRITE_BUFFER, vbo2) 绑定为临时的类型
+     * glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, windowWidth, windowHeight, 0); 将当前FBO纹理的内容拷贝到当前绑定的纹理中
+     * glGetTexImage(GL_TEXTURE_2D,0,GL_RGBA,GL_UNSIGNED_BYTE,data); // 将绑定纹理数据拷贝到data
+     * glTexImage2D(GL_TEXTURE_2D,0,0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,data); 将data数据填充到绑定纹理
+     */
+
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &cubeVAO);
