@@ -23,7 +23,7 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src TOOL_SRC)
 add_executable(${target}
         ${GLAD_GL}
         ${TOOL_SRC}
-        main.cpp)
+        test.cpp)
 add_subdirectory(3rdParty)
 find_library(OpenGL_LIBRARY OpenGL )
 find_library(Cocoa_LIBRARY Cocoa )
