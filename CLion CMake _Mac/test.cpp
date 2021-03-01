@@ -5,6 +5,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "ffmpeg/VideoDecoder.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -152,8 +154,28 @@ namespace TextDemo {
         return textureID;
     }
 
+    GLuint LoadTexture_memory(unsigned char* data,int width, int height, GLenum format = GL_RGB){
+        unsigned int textureID;
+        if (data)
+        {
+            glGenTextures(1, &textureID);
 
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        }
+        else
+        {
+            std::cout << "Texture failed to load at memory " << std::endl;
+        }
+
+        return textureID;
+    }
 
     GLuint make_shader(GLenum type, const char* text) {
         GLuint shader;
@@ -211,6 +233,9 @@ namespace TextDemo {
 void processInput(GLFWwindow *window);
 
 int main(){
+    // 解码视频流
+    VideoDecoder decoder("../../resources/male-single-video-face-smile.mp4");
+    std::cout << "window width: "<<decoder.getFrameWidth()<< " height: "<<decoder.getFrameHeight()<<std::endl;
 
     // glfw: initialize and configure
     // ------------------------------
@@ -225,7 +250,7 @@ int main(){
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(decoder.getFrameWidth(), decoder.getFrameHeight(), "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -269,12 +294,10 @@ int main(){
     error = glGetError();
     std::cout << "GL error: " << error << std::endl;
 
-    textureId = TextDemo::LoadTexture_stb("/Users/fordchen/Desktop/test_tga.tga");
-
-    glUseProgram(program);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glUniform1i(textureImage_location, 0);
+//    glUseProgram(program);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, textureId);
+//    glUniform1i(textureImage_location, 0);
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -304,6 +327,9 @@ int main(){
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        decoder.decodeNextFrame();
+        textureId = TextDemo::LoadTexture_memory(decoder.getFrameData(),decoder.getFrameWidth(),decoder.getFrameHeight());
 
         glUseProgram(program);
         glBindVertexArray(vao);
