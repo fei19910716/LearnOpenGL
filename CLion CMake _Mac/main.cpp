@@ -74,11 +74,13 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader shader("../../resources/shaders/advancedGL/9.2.geometry_shader.vs", "../../resources/shaders/advancedGL/9.2.geometry_shader.fs", "../../resources/shaders/advancedGL/9.2.geometry_shader.gs");
+    Shader shader("../../resources/shaders/advancedGL/9.3.default.vs", "../../resources/shaders/advancedGL/9.3.default.fs");
+    Shader normalShader("../../resources/shaders/advancedGL/9.3.normal_visualization.vs", "../../resources/shaders/advancedGL/9.3.normal_visualization.fs", "../../resources/shaders/advancedGL/9.3.normal_visualization.gs");
 
     // load models
     // -----------
-    Model nanosuit("../../resources/objects/nanosuit/nanosuit.obj");
+    stbi_set_flip_vertically_on_load(true);
+    Model backpack("../../resources/objects/nanosuit/nanosuit.obj");
 
     // render loop
     // -----------
@@ -108,11 +110,16 @@ int main()
         shader.setMat4("view", view);
         shader.setMat4("model", model);
 
-        // add time component to geometry shader in the form of a uniform
-        shader.setFloat("time", glfwGetTime());
+        // draw model as usual
+        backpack.Draw(shader);
 
-        // draw model
-        nanosuit.Draw(shader);
+        // then draw model with normal visualizing geometry shader
+        normalShader.use();
+        normalShader.setMat4("projection", projection);
+        normalShader.setMat4("view", view);
+        normalShader.setMat4("model", model);
+
+        backpack.Draw(normalShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
