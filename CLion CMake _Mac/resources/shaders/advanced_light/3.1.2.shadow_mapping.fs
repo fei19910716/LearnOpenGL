@@ -29,7 +29,20 @@ float ShadowCalculation(vec4 fragPosLightSpace, float bias)
 
     // 修复阴影失真产生的条纹黑线问题(Shadow Acne), 阴影失真主要是因为阴影贴图受限于分辨率，在距离光源比较远的情况下，多个片段可能从深度贴图的同一个值中去采样
     // float bias = 0.005; // just use a constant bias
-    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+    // float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+
+    // 使用PCF来进行多次采样求平均，得到柔和阴影；（也可以通过增加深度贴图的分辨率的方式来降低锯齿块，也可以尝试尽可能的让光的视锥接近场景。）
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+        }
+    }
+    shadow /= 9.0;
 
     if(projCoords.z > 1.0) // 当前frag可能在light space中超过far平面，但是处于camera space中正常范围，此时frag.z肯定是大于1.0的，此时肯定大于深度图的采样值，从而错误判定属于阴影。
             shadow = 0.0;
