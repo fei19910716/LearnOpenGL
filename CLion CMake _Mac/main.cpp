@@ -12,8 +12,6 @@
 
 #include <iostream>
 
-
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -81,12 +79,12 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // build and compile shaders // 大问题'''''''''为啥渲染出来的结果只有1/4
+    // build and compile shaders
     // -------------------------
-    Shader simpleDepthShader("../../resources/shaders/advanced_light/3.1.1.shadow_mapping_depth.vs", "../../resources/shaders/advanced_light/3.1.1.shadow_mapping_depth.fs");
-    Shader debugDepthQuad("../../resources/shaders/advanced_light/3.1.1.debug_quad.vs", "../../resources/shaders/advanced_light/3.1.1.debug_quad.fs");
+    Shader shader("../../resources/shaders/advanced_light/3.1.2.shadow_mapping.vs", "../../resources/shaders/advanced_light/3.1.2.shadow_mapping.fs");
+    Shader simpleDepthShader("../../resources/shaders/advanced_light/3.1.2.shadow_mapping_depth.vs", "../../resources/shaders/advanced_light/3.1.2.shadow_mapping_depth.fs");
+    Shader debugDepthQuad("../../resources/shaders/advanced_light/3.1.2.debug_quad.vs", "../../resources/shaders/advanced_light/3.1.2.debug_quad.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -98,7 +96,7 @@ int main()
 
             25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
             -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-            25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 10.0f
+            25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
     };
     // plane VAO
     unsigned int planeVBO;
@@ -121,7 +119,7 @@ int main()
 
     // configure depth map FBO
     // -----------------------
-    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024; // 生成1024*1024的深度图
+    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
     unsigned int depthMapFBO;
     glGenFramebuffers(1, &depthMapFBO);
     // create depth texture
@@ -143,6 +141,9 @@ int main()
 
     // shader configuration
     // --------------------
+    shader.use();
+    shader.setInt("diffuseTexture", 0); // set the texture unit
+    shader.setInt("shadowMap", 1);
     debugDepthQuad.use();
     debugDepthQuad.setInt("depthMap", 0);
 
@@ -174,14 +175,14 @@ int main()
         glm::mat4 lightProjection, lightView;
         glm::mat4 lightSpaceMatrix;
         float near_plane = 1.0f, far_plane = 7.5f;
-        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane); // 正交投影
         lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
         lightSpaceMatrix = lightProjection * lightView;
         // render scene from light's point of view
         simpleDepthShader.use();
         simpleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT); // 先设置viewPort
+        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
         glActiveTexture(GL_TEXTURE0);
@@ -189,14 +190,27 @@ int main()
         renderScene(simpleDepthShader);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        UTILS::writeTexturePNG("/Users/fordchen/Desktop/out.png",SHADOW_WIDTH,SHADOW_HEIGHT,depthMap, GL_DEPTH_COMPONENT);
+        // 2. render scene as normal using the generated depth/shadow map
+        // --------------------------------------------------------------
 
-        //! 对于retina来说，用SCR_WIDTH, SCR_HEIGHT设置glViewport()是不行的，因为分辨率的不同。https://learnopengl-cn.github.io/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/  (教程最后的评论)
-        //! 如果想正确的设置，https://stackoverflow.com/questions/25230841/how-to-find-display-scaling-factor-on-retina-4k-displays
         int window_w,window_h;
         glfwGetFramebufferSize(window,&window_w,&window_h);
         glViewport(0, 0, window_w, window_h);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        shader.use();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f); // 透视投影
+        glm::mat4 view = camera.GetViewMatrix();
+        shader.setMat4("projection", projection);
+        shader.setMat4("view", view);
+        // set light uniforms
+        shader.setVec3("viewPos", camera.Position);
+        shader.setVec3("lightPos", lightPos);
+        shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, woodTexture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        renderScene(shader);
 
         // render Depth map to quad for visual debugging
         // ---------------------------------------------
@@ -205,8 +219,7 @@ int main()
         debugDepthQuad.setFloat("far_plane", far_plane);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderQuad();
-        UTILS::writeResultPNG("/Users/fordchen/Desktop/out4.png",window_w,window_h, GL_RGBA);
+        //renderQuad();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -383,6 +396,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
