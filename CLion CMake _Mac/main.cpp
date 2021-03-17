@@ -187,7 +187,9 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, woodTexture);
+        glCullFace(GL_FRONT); // 如果通过设置bias解决阴影失真，bias过大可能会造成peter panning 现象。这个问题可以通过渲染背面来解决。因为此时采样深度图时，不会出现实际深度值与采样深度值大小不确定的情况。（采样深度值此时肯定是大的）
         renderScene(simpleDepthShader);
+        glCullFace(GL_BACK); // 不要忘记设回原先的culling face
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // 2. render scene as normal using the generated depth/shadow map
