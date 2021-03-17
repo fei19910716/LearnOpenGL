@@ -31,6 +31,9 @@ float ShadowCalculation(vec4 fragPosLightSpace, float bias)
     // float bias = 0.005; // just use a constant bias
     float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
+    if(projCoords.z > 1.0) // 当前frag可能在light space中超过far平面，但是处于camera space中正常范围，此时frag.z肯定是大于1.0的，此时肯定大于深度图的采样值，从而错误判定属于阴影。
+            shadow = 0.0;
+
     return shadow;
 }
 
